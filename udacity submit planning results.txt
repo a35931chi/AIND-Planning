@@ -1,0 +1,199 @@
+Submission includes the following files:
+    my_air_cargo_problems.py
+    my_planning_graph.py
+
+Uploading submission...
+[=========================== 100% ===========================] 27346/27346
+
+Waiting for results...Done!
+
+Results:
+--------
+
+************************************************************************
+                         Test Failure Feedback
+************************************************************************
+
+Failed Test: air_cargo_p2 returns the correct initial fluents
+----------------------------------------------------------------------
+AttributeError: 'NoneType' object has no attribute 'initial'
+
+
+Failed Test: air_cargo_p2 returns the correct goal fluents
+----------------------------------------------------------------------
+AttributeError: 'NoneType' object has no attribute 'goal'
+
+
+Failed Test: air_cargo_p2 returns the correct initial values
+----------------------------------------------------------------------
+AttributeError: 'NoneType' object has no attribute 'cargos'
+
+
+Failed Test: air_cargo_p3 returns the correct initial fluents
+----------------------------------------------------------------------
+AttributeError: 'NoneType' object has no attribute 'initial'
+
+
+Failed Test: air_cargo_p3 returns the correct goal fluents
+----------------------------------------------------------------------
+AttributeError: 'NoneType' object has no attribute 'goal'
+
+
+Failed Test: air_cargo_p3 returns the correct initial values
+----------------------------------------------------------------------
+AttributeError: 'NoneType' object has no attribute 'cargos'
+
+
+Failed Test: AirCargoProblem yields a correct solution when input to breadth_first_search
+----------------------------------------------------------------------
+AttributeError: 'NoneType' object has no attribute 'solution'
+
+
+Failed Test: Action levels have the correct number of actions
+----------------------------------------------------------------------
+IndexError: list index out of range
+
+
+Failed Test: Literal levels have the correct number of literals
+----------------------------------------------------------------------
+IndexError: list index out of range
+
+
+Failed Test: competing_needs_mutex behaves correctly
+----------------------------------------------------------------------
+IndexError: list index out of range
+
+
+Failed Test: inconsistent_effects_mutex behaves correctly
+----------------------------------------------------------------------
+IndexError: list index out of range
+
+
+Failed Test: inconsistent_support_mutex behaves correctly
+----------------------------------------------------------------------
+IndexError: list index out of range
+
+
+Failed Test: interference_mutex behaves correctly
+----------------------------------------------------------------------
+IndexError: list index out of range
+
+
+Failed Test: negation_mutex behaves correctly
+----------------------------------------------------------------------
+IndexError: list index out of range
+
+
+Failed Test: Serialization of mutexes is correct
+----------------------------------------------------------------------
+IndexError: list index out of range
+
+
+Failed Test: levelsum heuristic behaves correctly
+----------------------------------------------------------------------
+IndexError: list index out of range
+
+
+Failed Test: air_cargo_p2 returns an object of type problem
+----------------------------------------------------------------------
+AssertionError: None is not an instance of <class 'aimacode.search.Problem'> : Failed to return an object of type problem
+
+
+Failed Test: air_cargo_p3 returns an object of type problem
+----------------------------------------------------------------------
+AssertionError: None is not an instance of <class 'aimacode.search.Problem'> : Failed to return an object of type problem
+
+
+Failed Test: AirCargoProblem correctly lists possible actions in a given state
+----------------------------------------------------------------------
+AssertionError: Incorrect actions.
+
+Your code did not generate all required actions, which means that you may have skipped some combinations of fluents, or there may be an error in the action name or argument names that prevents a literal match with the signature specified in the schema.  Carefully review your actions against the schema defined in the project README.
+Missing actions:
+   Load(C1, P1, SFO)
+   Fly(P2, JFK, SFO)
+   Fly(P1, SFO, JFK)
+   Load(C2, P2, JFK)
+
+
+Failed Test: AirCargoProblem correctly constructs all possible actions
+----------------------------------------------------------------------
+AssertionError: Incorrect actions.
+
+Your code did not generate all required actions, which means that you may have skipped some combinations of fluents, or there may be an error in the action name or argument names that prevents a literal match with the signature specified in the schema.  Carefully review your actions against the schema defined in the project README.
+Missing actions:
+   Unload(C2, P1, SFO)
+   Unload(C2, P1, JFK)
+   Unload(C2, P2, SFO)
+   Load(C2, P2, JFK)
+   Unload(C1, P1, SFO)
+   Load(C2, P1, JFK)
+   Unload(C1, P2, SFO)
+   Load(C1, P2, JFK)
+   Load(C1, P1, SFO)
+   Load(C1, P1, JFK)
+   Load(C1, P2, SFO)
+   Unload(C1, P2, JFK)
+   Load(C2, P1, SFO)
+   Unload(C1, P1, JFK)
+   Load(C2, P2, SFO)
+   Unload(C2, P2, JFK)
+
+
+Failed Test: AirCargoProblem correctly updates state for a given action
+----------------------------------------------------------------------
+AssertionError: Lists differ: [] != ['At(C2, JFK)', 'At(P1, SFO)', 'At(P2, JFK)', 'In(C1, P1)']
+
+Second list contains 4 additional elements.
+First extra element 0:
+'At(C2, JFK)'
+
+- []
++ ['At(C2, JFK)', 'At(P1, SFO)', 'At(P2, JFK)', 'In(C1, P1)'] : Your result function did not produce the expected output. The list of positive fluents was incorrect.
+
+
+Failed Test: AirCargoProblem implements the ignore preconditions heuristic
+----------------------------------------------------------------------
+AssertionError: 0 != 2 : Your heuristic did not return the correct value for the minimum number of actions that must be carried out from the initial state in order to satisfy all of the goal conditions.
+
+
+************************************************************************
+                          Test Result Summary
+************************************************************************
+
+air_cargo_p2 returns the correct initial fluents                       E
+air_cargo_p2 returns the correct goal fluents                          E
+air_cargo_p2 returns the correct initial values                        E
+air_cargo_p3 returns the correct initial fluents                       E
+air_cargo_p3 returns the correct goal fluents                          E
+air_cargo_p3 returns the correct initial values                        E
+AirCargoProblem yields a correct solution when input to breadth_first  E
+Action levels have the correct number of actions                       E
+Literal levels have the correct number of literals                     E
+competing_needs_mutex behaves correctly                                E
+inconsistent_effects_mutex behaves correctly                           E
+inconsistent_support_mutex behaves correctly                           E
+interference_mutex behaves correctly                                   E
+negation_mutex behaves correctly                                       E
+Serialization of mutexes is correct                                    E
+levelsum heuristic behaves correctly                                   E
+air_cargo_p2 returns an object of type problem                         F
+air_cargo_p3 returns an object of type problem                         F
+AirCargoProblem correctly lists possible actions in a given state      F
+AirCargoProblem correctly constructs all possible actions              F
+AirCargoProblem correctly updates state for a given action             F
+AirCargoProblem implements the ignore preconditions heuristic          F
+air_cargo_p1 returns the correct initial fluents                       .
+air_cargo_p1 returns the correct goal fluents                          .
+air_cargo_p1 returns an object of type problem                         .
+air_cargo_p1 returns the correct initial values                        .
+
+--------------------------------------------------------------------------------
+
+Not all of the tests passed.  If you are really stuck, consider asking your classroom mentor for help.
+
+
+Details are available in cargo_planning-result-169524.json.
+
+If you would like this version of the project to be reviewed,
+submit cargo_planning-169524.zip to the reviews website.
