@@ -368,3 +368,32 @@ def air_cargo_p3() -> AirCargoProblem:
             ]
     
     return AirCargoProblem(cargos, planes, airports, init, goal)
+
+if __name__ == '__main__':
+    p = air_cargo_p1()
+    print("**** want to look at how the problem works ****")
+    print("Initial state for this problem is {}".format(p.initial))
+    print("Actions for this domain are:")
+    for a in p.actions_list:
+        print('   {} {}'.format(a.name, a.args))
+    print("Fluents in this problem are:")
+    for f in p.state_map:
+        print('   {}'.format(f))
+    print("Goal requirement for this problem are:")
+    for g in p.goal:
+        print('   {}'.format(g))
+    print()
+    print("*** Breadth First Search")
+    run_search(p, breadth_first_search)
+    print("*** Depth First Search")
+    run_search(p, depth_first_graph_search)
+    print("*** Uniform Cost Search")
+    run_search(p, uniform_cost_search)
+    print("*** Greedy Best First Graph Search - null heuristic")
+    run_search(p, greedy_best_first_graph_search, parameter=p.h_1)
+    print("*** A-star null heuristic")
+    run_search(p, astar_search, p.h_1)
+    # print("A-star ignore preconditions heuristic")
+    # rs(p, "astar_search - ignore preconditions heuristic", astar_search, p.h_ignore_preconditions)
+    # print(""A-star levelsum heuristic)
+    # rs(p, "astar_search - levelsum heuristic", astar_search, p.h_pg_levelsum)
