@@ -14,21 +14,6 @@ Results:
                          Test Failure Feedback
 ************************************************************************
 
-Failed Test: air_cargo_p2 returns the correct initial fluents
-----------------------------------------------------------------------
-AttributeError: 'NoneType' object has no attribute 'initial'
-
-
-Failed Test: air_cargo_p2 returns the correct goal fluents
-----------------------------------------------------------------------
-AttributeError: 'NoneType' object has no attribute 'goal'
-
-
-Failed Test: air_cargo_p2 returns the correct initial values
-----------------------------------------------------------------------
-AttributeError: 'NoneType' object has no attribute 'cargos'
-
-
 Failed Test: air_cargo_p3 returns the correct initial fluents
 ----------------------------------------------------------------------
 AttributeError: 'NoneType' object has no attribute 'initial'
@@ -94,11 +79,6 @@ Failed Test: levelsum heuristic behaves correctly
 IndexError: list index out of range
 
 
-Failed Test: air_cargo_p2 returns an object of type problem
-----------------------------------------------------------------------
-AssertionError: None is not an instance of <class 'aimacode.search.Problem'> : Failed to return an object of type problem
-
-
 Failed Test: air_cargo_p3 returns an object of type problem
 ----------------------------------------------------------------------
 AssertionError: None is not an instance of <class 'aimacode.search.Problem'> : Failed to return an object of type problem
@@ -110,10 +90,10 @@ AssertionError: Incorrect actions.
 
 Your code did not generate all required actions, which means that you may have skipped some combinations of fluents, or there may be an error in the action name or argument names that prevents a literal match with the signature specified in the schema.  Carefully review your actions against the schema defined in the project README.
 Missing actions:
-   Load(C1, P1, SFO)
    Fly(P2, JFK, SFO)
-   Fly(P1, SFO, JFK)
    Load(C2, P2, JFK)
+   Fly(P1, SFO, JFK)
+   Load(C1, P1, SFO)
 
 
 Failed Test: AirCargoProblem correctly constructs all possible actions
@@ -122,22 +102,22 @@ AssertionError: Incorrect actions.
 
 Your code did not generate all required actions, which means that you may have skipped some combinations of fluents, or there may be an error in the action name or argument names that prevents a literal match with the signature specified in the schema.  Carefully review your actions against the schema defined in the project README.
 Missing actions:
-   Unload(C2, P1, SFO)
    Unload(C2, P1, JFK)
-   Unload(C2, P2, SFO)
-   Load(C2, P2, JFK)
-   Unload(C1, P1, SFO)
    Load(C2, P1, JFK)
-   Unload(C1, P2, SFO)
+   Unload(C1, P1, SFO)
+   Load(C1, P2, SFO)
+   Load(C2, P2, SFO)
    Load(C1, P2, JFK)
+   Unload(C1, P2, SFO)
+   Unload(C2, P1, SFO)
    Load(C1, P1, SFO)
    Load(C1, P1, JFK)
-   Load(C1, P2, SFO)
-   Unload(C1, P2, JFK)
-   Load(C2, P1, SFO)
+   Unload(C2, P2, SFO)
+   Load(C2, P2, JFK)
    Unload(C1, P1, JFK)
-   Load(C2, P2, SFO)
    Unload(C2, P2, JFK)
+   Load(C2, P1, SFO)
+   Unload(C1, P2, JFK)
 
 
 Failed Test: AirCargoProblem correctly updates state for a given action
@@ -161,9 +141,6 @@ AssertionError: 0 != 2 : Your heuristic did not return the correct value for the
                           Test Result Summary
 ************************************************************************
 
-air_cargo_p2 returns the correct initial fluents                       E
-air_cargo_p2 returns the correct goal fluents                          E
-air_cargo_p2 returns the correct initial values                        E
 air_cargo_p3 returns the correct initial fluents                       E
 air_cargo_p3 returns the correct goal fluents                          E
 air_cargo_p3 returns the correct initial values                        E
@@ -177,7 +154,6 @@ interference_mutex behaves correctly                                   E
 negation_mutex behaves correctly                                       E
 Serialization of mutexes is correct                                    E
 levelsum heuristic behaves correctly                                   E
-air_cargo_p2 returns an object of type problem                         F
 air_cargo_p3 returns an object of type problem                         F
 AirCargoProblem correctly lists possible actions in a given state      F
 AirCargoProblem correctly constructs all possible actions              F
@@ -187,13 +163,17 @@ air_cargo_p1 returns the correct initial fluents                       .
 air_cargo_p1 returns the correct goal fluents                          .
 air_cargo_p1 returns an object of type problem                         .
 air_cargo_p1 returns the correct initial values                        .
+air_cargo_p2 returns the correct initial fluents                       .
+air_cargo_p2 returns the correct goal fluents                          .
+air_cargo_p2 returns an object of type problem                         .
+air_cargo_p2 returns the correct initial values                        .
 
 --------------------------------------------------------------------------------
 
 Not all of the tests passed.  If you are really stuck, consider asking your classroom mentor for help.
 
 
-Details are available in cargo_planning-result-169524.json.
+Details are available in cargo_planning-result-169556.json.
 
 If you would like this version of the project to be reviewed,
-submit cargo_planning-169524.zip to the reviews website.
+submit cargo_planning-169556.zip to the reviews website.
