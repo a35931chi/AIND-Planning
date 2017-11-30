@@ -62,11 +62,6 @@ class AirCargoProblem(Problem):
             Load(c, p, a), #cargo, plan, airport
             PRECOND: At(c, a) ∧ At(p, a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
             EFFECT: ¬ At(c, a) ∧ In(c, p)
-
-            Fly(p, from, to),
-            PRECOND: At(p, from) ∧ Plane(p) ∧ Airport(from) ∧ Airport(to)
-            EFFECT: ¬ At(p, from) ∧ At(p, to)
-            
             """
             loads = []
             # TODO create all load ground actions from the domain Load action
@@ -102,8 +97,8 @@ class AirCargoProblem(Problem):
                                        expr("At({}, {})".format(plane, airport)),
                                        ]
                         precond_neg = []
-                        effect_add = [expr("In({}, {})".format(cargo, plane))]
-                        effect_rem = [expr("At({}, {})".format(cargo, airport))]
+                        effect_add = [expr("At({}, {})".format(cargo, airport))]
+                        effect_rem = [expr("In({}, {})".format(cargo, plane))]
                         unload = Action(expr("Unload({}, {}, {})".format(cargo, plane, airport)),
                                       [precond_pos, precond_neg],
                                       [effect_add, effect_rem])
@@ -370,6 +365,12 @@ def air_cargo_p3() -> AirCargoProblem:
     return AirCargoProblem(cargos, planes, airports, init, goal)
 
 if __name__ == '__main__':
+    from aimacode.search import (
+        breadth_first_search, astar_search, depth_first_graph_search,
+        uniform_cost_search, greedy_best_first_graph_search)
+
+    import run_search
+    
     p = air_cargo_p1()
     print("**** want to look at how the problem works ****")
     print("Initial state for this problem is {}".format(p.initial))
@@ -384,16 +385,22 @@ if __name__ == '__main__':
         print('   {}'.format(g))
     print()
     print("*** Breadth First Search")
-    run_search(p, breadth_first_search)
+    run_search.run_search(p, breadth_first_search)
+    what = input('wait...')
     print("*** Depth First Search")
-    run_search(p, depth_first_graph_search)
+    run_search.run_search(p, depth_first_graph_search)
+    what = input('wait...')
     print("*** Uniform Cost Search")
-    run_search(p, uniform_cost_search)
+    run_search.run_search(p, uniform_cost_search)
+    what = input('wait...')
     print("*** Greedy Best First Graph Search - null heuristic")
-    run_search(p, greedy_best_first_graph_search, parameter=p.h_1)
+    run_search.run_search(p, greedy_best_first_graph_search, parameter=p.h_1)
+    what = input('wait...')
     print("*** A-star null heuristic")
-    run_search(p, astar_search, p.h_1)
+    run_search.run_search(p, astar_search, p.h_1)
+    #what = input('wait...')
     # print("A-star ignore preconditions heuristic")
     # rs(p, "astar_search - ignore preconditions heuristic", astar_search, p.h_ignore_preconditions)
     # print(""A-star levelsum heuristic)
     # rs(p, "astar_search - levelsum heuristic", astar_search, p.h_pg_levelsum)
+
