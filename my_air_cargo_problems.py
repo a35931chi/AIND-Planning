@@ -27,13 +27,13 @@ class AirCargoProblem(Problem):
         :param goal: list of expr
             literal fluents required for goal test
         """
-        self.state_map = initial.pos + initial.neg
+        self.state_map = initial.pos + initial.neg #this is passed in by the problem definition
         self.initial_state_TF = encode_state(initial, self.state_map)
-        Problem.__init__(self, self.initial_state_TF, goal=goal)
+        Problem.__init__(self, self.initial_state_TF, goal = goal)
         self.cargos = cargos
         self.planes = planes
         self.airports = airports
-        self.actions_list = self.get_actions()
+        self.actions_list = self.get_actions() #this is permutation of all possible actions
 
     def get_actions(self):
         """
@@ -198,6 +198,7 @@ class AirCargoProblem(Problem):
     def h_1(self, node: Node):
         # note that this is not a true heuristic
         h_const = 1
+        print('running h_1')
         return h_const
 
     @lru_cache(maxsize=8192)
@@ -210,6 +211,7 @@ class AirCargoProblem(Problem):
         # requires implemented PlanningGraph class
         pg = PlanningGraph(self, node.state)
         pg_levelsum = pg.h_levelsum()
+        print('running h_pg_levelsum')
         return pg_levelsum
 
     @lru_cache(maxsize=8192)
@@ -220,7 +222,18 @@ class AirCargoProblem(Problem):
         executed.
         """
         # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
-        count = 0
+        '''
+        if it is a precondition:
+            count = 0
+        if it is not a precondition:
+            count = 1
+        '''
+        count = 1
+
+        for a in self.actions_list:
+            a.precond_pos = []
+            a.precond_neg = []
+
         return count
 
 
@@ -228,7 +241,8 @@ def air_cargo_p1() -> AirCargoProblem:
     cargos = ['C1', 'C2']
     planes = ['P1', 'P2']
     airports = ['JFK', 'SFO']
-    
+
+    #these are not preconditions, there are just the T&F that at the very beginning of the exercise
     pos = [expr('At(C1, SFO)'),
            expr('At(C2, JFK)'),
            expr('At(P1, SFO)'),
@@ -309,29 +323,29 @@ def air_cargo_p2() -> AirCargoProblem:
 def air_cargo_p3() -> AirCargoProblem:
     # TODO implement Problem 3 definition
     cargos = ['C1', 'C2', 'C3', 'C4']
-    planes = ['P1', 'P2', 'P3', 'P4']
+    planes = ['P1', 'P2']
     airports = ['SFO', 'JFK', 'ATL', 'ORD']
 
     pos = [expr('At(C1, SFO)'),
            expr('At(C2, JFK)'),
            expr('At(C3, ATL)'),
-           expr('At(C3, ORD)'),
+           expr('At(C4, ORD)'),
            
            expr('At(P1, SFO)'),
            expr('At(P2, JFK)'),
            ]
 
-    neg = [expr('At(C2, SFO)'),
-           expr('At(C2, ATL)'),
-           expr('At(C2, ORD)'),
-           expr('In(C2, P1)'),
-           expr('In(C2, P2)'),
-           
-           expr('At(C1, JFK)'),
+    neg = [expr('At(C1, JFK)'),
            expr('At(C1, ATL)'),
            expr('At(C1, ORD)'),
            expr('In(C1, P1)'),
            expr('In(C1, P2)'),
+
+           expr('At(C2, SFO)'),
+           expr('At(C2, ATL)'),
+           expr('At(C2, ORD)'),
+           expr('In(C2, P1)'),
+           expr('In(C2, P2)'),
 
            expr('At(C3, SFO)'),
            expr('At(C3, JFK)'),
@@ -341,7 +355,7 @@ def air_cargo_p3() -> AirCargoProblem:
 
            expr('At(C4, SFO)'),
            expr('At(C4, JFK)'),
-           expr('At(C4, ORD)'),
+           expr('At(C4, ATL)'),
            expr('In(C4, P1)'),
            expr('In(C4, P2)'),
            
@@ -357,8 +371,8 @@ def air_cargo_p3() -> AirCargoProblem:
     init = FluentState(pos, neg)
     
     goal = [expr('At(C1, JFK)'),
-            expr('At(C3, JFK)'),
             expr('At(C2, SFO)'),
+            expr('At(C3, JFK)'),
             expr('At(C4, SFO)'),
             ]
     
@@ -368,22 +382,29 @@ if __name__ == '__main__':
     from aimacode.search import (
         breadth_first_search, astar_search, depth_first_graph_search,
         uniform_cost_search, greedy_best_first_graph_search)
-
     import run_search
     
     p = air_cargo_p1()
+    print('heres a list of preconditions')
+    for a in p.actions_list:
+        print(type(a.name), type(a.args))
+        print(a.name, a.args, a.precond_pos, a.precond_neg, a.effect_add, a.effect_rem)
     print("**** want to look at how the problem works ****")
-    print("Initial state for this problem is {}".format(p.initial))
-    print("Actions for this domain are:")
+    print("Initial state for this problem is {}".format(p.initial)) # #of pos and # of neg
+    print("Actions for this domain are (p.actions_list): ")
     for a in p.actions_list:
         print('   {} {}'.format(a.name, a.args))
-    print("Fluents in this problem are:")
+    print("Fluents in this problem are (p.state_map): ")
     for f in p.state_map:
         print('   {}'.format(f))
-    print("Goal requirement for this problem are:")
+    print("Goal requirement for this problem are (p.goal): ")
     for g in p.goal:
         print('   {}'.format(g))
     print()
+    print("TESTING!!!!!!!!!!")
+    #run_search.run_search(p, astar_search, p.h_pg_levelsum)
+    run_search.run_search(p, astar_search, p.h_ignore_preconditions)
+    what = input('wait...')
     print("*** Breadth First Search")
     run_search.run_search(p, breadth_first_search)
     what = input('wait...')
@@ -394,13 +415,13 @@ if __name__ == '__main__':
     run_search.run_search(p, uniform_cost_search)
     what = input('wait...')
     print("*** Greedy Best First Graph Search - null heuristic")
-    run_search.run_search(p, greedy_best_first_graph_search, parameter=p.h_1)
+    run_search.run_search(p, greedy_best_first_graph_search, parameter = p.h_1)
     what = input('wait...')
     print("*** A-star null heuristic")
     run_search.run_search(p, astar_search, p.h_1)
     #what = input('wait...')
     # print("A-star ignore preconditions heuristic")
     # rs(p, "astar_search - ignore preconditions heuristic", astar_search, p.h_ignore_preconditions)
-    # print(""A-star levelsum heuristic)
+    # print("A-star levelsum heuristic")
     # rs(p, "astar_search - levelsum heuristic", astar_search, p.h_pg_levelsum)
 

@@ -54,8 +54,10 @@ def run_search(problem, search_function, parameter=None):
     start = timer()
     ip = PrintableProblem(problem)
     if parameter is not None:
+        print('with parameter')
         node = search_function(ip, parameter)
     else:
+        print('without parameter')
         node = search_function(ip)
     end = timer()
     print("\nExpansions   Goal Tests   New Nodes")

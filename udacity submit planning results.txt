@@ -59,26 +59,9 @@ Failed Test: levelsum heuristic behaves correctly
 IndexError: list index out of range
 
 
-Failed Test: air_cargo_p3 returns the correct initial fluents
-----------------------------------------------------------------------
-AssertionError: False is not true : Incorrect fluent
-
-
-Failed Test: air_cargo_p3 returns the correct initial values
-----------------------------------------------------------------------
-AssertionError: Lists differ: ['P1', 'P2', 'P3', 'P4'] != ['P1', 'P2']
-
-First list contains 2 additional elements.
-First extra element 2:
-'P3'
-
-- ['P1', 'P2', 'P3', 'P4']
-+ ['P1', 'P2']
-
-
 Failed Test: AirCargoProblem implements the ignore preconditions heuristic
 ----------------------------------------------------------------------
-AssertionError: 0 != 2 : Your heuristic did not return the correct value for the minimum number of actions that must be carried out from the initial state in order to satisfy all of the goal conditions.
+AssertionError: 1 != 2 : Your heuristic did not return the correct value for the minimum number of actions that must be carried out from the initial state in order to satisfy all of the goal conditions.
 
 
 ************************************************************************
@@ -94,8 +77,6 @@ interference_mutex behaves correctly                                   E
 negation_mutex behaves correctly                                       E
 Serialization of mutexes is correct                                    E
 levelsum heuristic behaves correctly                                   E
-air_cargo_p3 returns the correct initial fluents                       F
-air_cargo_p3 returns the correct initial values                        F
 AirCargoProblem implements the ignore preconditions heuristic          F
 air_cargo_p1 returns the correct initial fluents                       .
 air_cargo_p1 returns the correct goal fluents                          .
@@ -105,8 +86,10 @@ air_cargo_p2 returns the correct initial fluents                       .
 air_cargo_p2 returns the correct goal fluents                          .
 air_cargo_p2 returns an object of type problem                         .
 air_cargo_p2 returns the correct initial values                        .
+air_cargo_p3 returns the correct initial fluents                       .
 air_cargo_p3 returns the correct goal fluents                          .
 air_cargo_p3 returns an object of type problem                         .
+air_cargo_p3 returns the correct initial values                        .
 AirCargoProblem correctly lists possible actions in a given state      .
 AirCargoProblem correctly constructs all possible actions              .
 AirCargoProblem correctly updates state for a given action             .
@@ -117,7 +100,7 @@ AirCargoProblem yields a correct solution when input to breadth_first  .
 Not all of the tests passed.  If you are really stuck, consider asking your classroom mentor for help.
 
 
-Details are available in cargo_planning-result-169713.json.
+Details are available in cargo_planning-result-170147.json.
 
 If you would like this version of the project to be reviewed,
-submit cargo_planning-169713.zip to the reviews website.
+submit cargo_planning-170147.zip to the reviews website.
