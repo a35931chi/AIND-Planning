@@ -159,7 +159,7 @@ def graph_search(problem, frontier):
         explored.add(node.state)
         frontier.extend(child for child in node.expand(problem)
                         if child.state not in explored and
-                        child not in frontier)
+                        child not in frontier) #the code is more efficient than the breath first search
     return None
 
 

@@ -143,8 +143,10 @@ class AirCargoProblem(Problem):
         # TODO implement
         possible_actions = []
         kb = PropKB()
-        kb.tell(decode_state(state, self.state_map).pos_sentence())
+        kb.tell(decode_state(state, self.state_map).pos_sentence()) #the only true states are loaded into the kb.clauses
         for action in self.actions_list:
+            print(action, action.precond_pos, action.precond_neg, action.effect_add)
+            print(kb.clauses)
             is_possible = True
             for clause in action.precond_pos:
                 if clause not in kb.clauses:
@@ -153,7 +155,10 @@ class AirCargoProblem(Problem):
                 if clause in kb.clauses:
                     is_possible = False
             if is_possible:
+                print('possible', action)
                 possible_actions.append(action)
+            else:
+                print('not possible', action)
         return possible_actions
 
     def result(self, state: str, action: Action):
@@ -212,7 +217,6 @@ class AirCargoProblem(Problem):
         # requires implemented PlanningGraph class
         pg = PlanningGraph(self, node.state)
         pg_levelsum = pg.h_levelsum()
-        print('running h_pg_levelsum')
         return pg_levelsum
 
     @lru_cache(maxsize=8192)
@@ -412,33 +416,57 @@ if __name__ == '__main__':
         print('action, name, arg, precond pos, precon neg, effect pos, effect neg')
         for a in p.actions_list:
             print(a, a.name, a.args, a.precond_pos, a.precond_neg, a.effect_add, a.effect_rem)
-        what = input('wait...')
-    
+        pause = input('wait...')
+
+    if True:
+        print('actions testing')
+        print(p.actions('TTTTFFFFFFFF'))
+        pause = input('wait...')
+        
     print("**** want to look at how the problem works ****")
     print("TESTING!!!!!!!!!!")
-
-    if False:
+    
+    if False: #the solution is correct
         print("*** Breadth First Search")
+        ##Expansions   Goal Tests   New Nodes
+        ##    43          56         180
+        ##Plan length: 6  Time elapsed in seconds: 0.034479494898475814
         run_search.run_search(p, breadth_first_search)
+        pause = input('wait...')
+        
+    if False: #the solution is correct, but terrible
+        print("*** Depth First Search")
+        ##Expansions   Goal Tests   New Nodes
+        ##    12          13          48    
+        ##Plan length: 12  Time elapsed in seconds: 0.008538446445639178
+        run_search.run_search(p, depth_first_graph_search)
+        pause = input('wait...')
+        
+    if False: #the solution is correct, seems like it performs better than breath first
+        print("*** Uniform Cost Search")
+        ##Expansions   Goal Tests   New Nodes
+        ##    55          57         224    
+        ##Plan length: 6  Time elapsed in seconds: 0.03182965293049566
+        run_search.run_search(p, uniform_cost_search)
+        pause = input('wait...')
+
+    if False: #the solution is correct, 
+        print("*** Greedy Best First Graph Search - null heuristic")
+        ##Expansions   Goal Tests   New Nodes
+        ##    7           9           28    
+        ##Plan length: 6  Time elapsed in seconds: 0.05840529331397908
+        run_search.run_search(p, greedy_best_first_graph_search, parameter = p.h_1)
+        what = input('wait...')
+
+    if False: #the solution is correct, 
+        print("*** A-star null heuristic")
+        ##Expansions   Goal Tests   New Nodes
+        ##    55          57         224    
+        ##Plan length: 6  Time elapsed in seconds: 0.30521858717361106
+        run_search.run_search(p, astar_search, p.h_1)
         what = input('wait...')
     
-    print("*** Depth First Search")
-    run_search.run_search(p, depth_first_graph_search)
-    what = input('wait...')
-    
-    print("*** Uniform Cost Search")
-    run_search.run_search(p, uniform_cost_search)
-    what = input('wait...')
-    
-    print("*** Greedy Best First Graph Search - null heuristic")
-    run_search.run_search(p, greedy_best_first_graph_search, parameter = p.h_1)
-    what = input('wait...')
-    
-    print("*** A-star null heuristic")
-    run_search.run_search(p, astar_search, p.h_1)
-    what = input('wait...')
-    
-    #run_search.run_search(p, astar_search, p.h_pg_levelsum)
+    print("A-star ignore preconditions heuristic")
     run_search.run_search(p, astar_search, p.h_ignore_preconditions)
     what = input('wait...')
     
