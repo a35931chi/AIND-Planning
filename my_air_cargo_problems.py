@@ -145,8 +145,8 @@ class AirCargoProblem(Problem):
         kb = PropKB()
         kb.tell(decode_state(state, self.state_map).pos_sentence()) #the only true states are loaded into the kb.clauses
         for action in self.actions_list:
-            print(action, action.precond_pos, action.precond_neg, action.effect_add)
-            print(kb.clauses)
+            #print(action, action.precond_pos, action.precond_neg, action.effect_add)
+            #print(kb.clauses)
             is_possible = True
             for clause in action.precond_pos:
                 if clause not in kb.clauses:
@@ -155,10 +155,10 @@ class AirCargoProblem(Problem):
                 if clause in kb.clauses:
                     is_possible = False
             if is_possible:
-                print('possible', action)
+                #print('possible', action)
                 possible_actions.append(action)
-            else:
-                print('not possible', action)
+            #else:
+                #print('not possible', action)
         return possible_actions
 
     def result(self, state: str, action: Action):
@@ -227,20 +227,14 @@ class AirCargoProblem(Problem):
         executed.
         """
         # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
-        '''
-        if it is a precondition:
-            count = 0
-        if it is not a precondition:
-            count = 1
-        '''
-        count = 1
-        print(node.state)
-        for a in self.actions_list:
-            a.precond_pos = []
-            a.precond_neg
 
-        return count
-
+        kb = PropKB()
+        kb.tell(decode_state(node.state, self.state_map).pos_sentence())
+        for action in self.actions_list:
+            for clause in action.effect_add:
+                if clause in kb.clauses:
+                    return 1
+        return 0
 
 def air_cargo_p1() -> AirCargoProblem:
     cargos = ['C1', 'C2']
@@ -248,6 +242,7 @@ def air_cargo_p1() -> AirCargoProblem:
     airports = ['JFK', 'SFO']
 
     #these are not preconditions, there are just the T&F that at the very beginning of the exercise
+    #note that these are all the avaiable fluents, and may change between T and F depending on the state
     pos = [expr('At(C1, SFO)'),
            expr('At(C2, JFK)'),
            expr('At(P1, SFO)'),
@@ -418,9 +413,10 @@ if __name__ == '__main__':
             print(a, a.name, a.args, a.precond_pos, a.precond_neg, a.effect_add, a.effect_rem)
         pause = input('wait...')
 
-    if True:
+    # the actions method returns possible actions. it is based on comparing the state fluent and preconditions
+    if False:
         print('actions testing')
-        print(p.actions('TTTTFFFFFFFF'))
+        print(p.actions('FTTTFFFFFFFF'))
         pause = input('wait...')
         
     print("**** want to look at how the problem works ****")
