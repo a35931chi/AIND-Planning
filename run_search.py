@@ -53,6 +53,7 @@ def run_search(problem, search_function, parameter=None):
 
     start = timer()
     ip = PrintableProblem(problem)
+    
     if parameter is not None:
         print('with parameter')
         node = search_function(ip, parameter)

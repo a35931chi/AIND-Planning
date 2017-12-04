@@ -180,6 +180,7 @@ class AirCargoProblem(Problem):
         for fluent in action.effect_rem:
             if fluent not in new_state.neg:
                 new_state.neg.append(fluent)
+                
         return encode_state(new_state, self.state_map)
 
     def goal_test(self, state: str) -> bool:
@@ -229,10 +230,10 @@ class AirCargoProblem(Problem):
             count = 1
         '''
         count = 1
-
+        print(node.state)
         for a in self.actions_list:
             a.precond_pos = []
-            a.precond_neg = []
+            a.precond_neg
 
         return count
 
@@ -385,40 +386,62 @@ if __name__ == '__main__':
     import run_search
     
     p = air_cargo_p1()
-    print('heres a list of preconditions')
-    for a in p.actions_list:
-        print(type(a.name), type(a.args))
-        print(a.name, a.args, a.precond_pos, a.precond_neg, a.effect_add, a.effect_rem)
+    
+    # the problem is the air cargo problem
+    # it takes in cargo (input options), planes (input options), airports (input options), initial fluent states(pos and neg), and goals
+    # initial fluent states are a bunch of positive and negative expressions that limits the combinations of inputs at the initial stage
+    # state_map is the combination of pos and neg fluents, translate into True or False 
+    # goal contains a bunch of expressions that we want to satisfy at the same time
+    # initial_state_TF is the fluent state translate into positive or negative fluents, indicated by True or False
+    
+    # for this problem's actions_list, there's 3 types of actions: fly, load, unload. each action is a combination of the available inputs
+    # the action class is initialized with name(string), args(input tuples), preconditions(expressions), and effects(expressions)
+    # this is all the available actions for the problem, and we are also listing their preconditions as well as their effects
+
+    # the problem is setup as the initial conditions/states. We will use the available actions to get us to the defined goal
+    if False:
+        print('here are the available inputs:')
+        print('cargo: ', p.cargos)
+        print('airplanes: ', p.planes)
+        print('airport: ', p.airports)
+        print('heres how the problem is setup:')
+        print('all fluents: ', p.state_map)
+        print('fluents by T/F: ', p.initial_state_TF)
+        print('our ultimate goal: ', p.goal)
+        print('heres a list of available actions:')
+        print('action, name, arg, precond pos, precon neg, effect pos, effect neg')
+        for a in p.actions_list:
+            print(a, a.name, a.args, a.precond_pos, a.precond_neg, a.effect_add, a.effect_rem)
+        what = input('wait...')
+    
     print("**** want to look at how the problem works ****")
-    print("Initial state for this problem is {}".format(p.initial)) # #of pos and # of neg
-    print("Actions for this domain are (p.actions_list): ")
-    for a in p.actions_list:
-        print('   {} {}'.format(a.name, a.args))
-    print("Fluents in this problem are (p.state_map): ")
-    for f in p.state_map:
-        print('   {}'.format(f))
-    print("Goal requirement for this problem are (p.goal): ")
-    for g in p.goal:
-        print('   {}'.format(g))
-    print()
     print("TESTING!!!!!!!!!!")
-    #run_search.run_search(p, astar_search, p.h_pg_levelsum)
-    run_search.run_search(p, astar_search, p.h_ignore_preconditions)
-    what = input('wait...')
-    print("*** Breadth First Search")
-    run_search.run_search(p, breadth_first_search)
-    what = input('wait...')
+
+    if False:
+        print("*** Breadth First Search")
+        run_search.run_search(p, breadth_first_search)
+        what = input('wait...')
+    
     print("*** Depth First Search")
     run_search.run_search(p, depth_first_graph_search)
     what = input('wait...')
+    
     print("*** Uniform Cost Search")
     run_search.run_search(p, uniform_cost_search)
     what = input('wait...')
+    
     print("*** Greedy Best First Graph Search - null heuristic")
     run_search.run_search(p, greedy_best_first_graph_search, parameter = p.h_1)
     what = input('wait...')
+    
     print("*** A-star null heuristic")
     run_search.run_search(p, astar_search, p.h_1)
+    what = input('wait...')
+    
+    #run_search.run_search(p, astar_search, p.h_pg_levelsum)
+    run_search.run_search(p, astar_search, p.h_ignore_preconditions)
+    what = input('wait...')
+    
     #what = input('wait...')
     # print("A-star ignore preconditions heuristic")
     # rs(p, "astar_search - ignore preconditions heuristic", astar_search, p.h_ignore_preconditions)

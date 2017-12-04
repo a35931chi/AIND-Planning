@@ -181,19 +181,34 @@ def depth_first_graph_search(problem):
 def breadth_first_search(problem):
     "[Figure 3.11]"
     node = Node(problem.initial)
+    #print('problem.inital in breath_first_search: ', problem.initial)
+    #print('initial node: ', node)
+    #print('initial node.state: ', node.state)
     if problem.goal_test(node.state):
         return node
     frontier = FIFOQueue()
     frontier.append(node)
     explored = set()
+    #print('first frontier: ', frontier.A)
     while frontier:
         node = frontier.pop()
+        #print('length {}, frontier: {}'.format(len(frontier.A), frontier.A))
         explored.add(node.state)
+        #print('explored: ', explored)
+        #print('possible childern for the problem:', node.expand(problem))
         for child in node.expand(problem):
+            #print('looking at child: ', child)
+            #print('our goal is: ', problem.goal)
             if child.state not in explored and child not in frontier:
+                #print('new child')
                 if problem.goal_test(child.state):
-                    return child
+                    #print('found solution')
+                    return child #if child is goal, then
+                #else:
+                    #print('not solution')
                 frontier.append(child)
+            #print('updated frontier: ', frontier.A)
+            #what = input('looking at search steps...')
     return None
 
 
