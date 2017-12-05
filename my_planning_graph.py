@@ -496,6 +496,17 @@ class PlanningGraph():
         """
 
         # TODO test for Competing Needs between nodes
+        #print('node 1: ', node_a1.action, [(node.symbol, node.is_pos) for node in node_a1.prenodes])
+        #print('node 2: ', node_a2.action, [(node.symbol, node.is_pos) for node in node_a2.prenodes])
+        
+        for node1 in node_a1.prenodes:
+            for node2 in node_a2.prenodes:
+                #print('node1: ', node1.symbol, node1.is_pos)
+                #print('node2: ', node2.symbol, node2.is_pos)
+                if node1.symbol == node2.symbol and node1.is_pos != node2.is_pos:
+                    #print('inconsistent')
+                    return True
+        
         return False
 
     def update_s_mutex(self, nodeset: set):
@@ -531,6 +542,8 @@ class PlanningGraph():
         :return: bool
         """
         # TODO test for negation between nodes
+        if node_s1.symbol == node_s2.symbol and node_s1.is_pos != node_s2.is_pos:
+            return True
         return False
 
     def inconsistent_support_mutex(self, node_s1: PgNode_s, node_s2: PgNode_s):
@@ -550,6 +563,33 @@ class PlanningGraph():
         :return: bool
         """
         # TODO test for Inconsistent Support between nodes
+
+        action_collect1 = set()
+        action_collect2 = set()
+        for action in self.all_actions:
+            #print('out of all actions: ', action)
+            for SNode in PgNode_a(action).effnodes:
+                #print('SNode: ', SNode.symbol, SNode.is_pos)
+                #print('node 1: ', node_s1.symbol, node_s1.is_pos)
+                #print('node 2: ', node_s2.symbol, node_s2.is_pos)
+                if SNode.symbol == node_s1.symbol and SNode.is_pos == node_s1.is_pos:
+                    #print('found one for node 1', action)
+                    action_collect1.add(action)
+                if SNode.symbol == node_s2.symbol and SNode.is_pos == node_s2.is_pos:
+                    #print('found one for node 2', action)
+                    action_collect2.add(action)
+                    
+        #print(action_collect1)
+        #print(action_collect2)
+        #print('\n')
+
+        for action1 in action_collect1:
+            for action2 in action_collect2:
+                #print('comparing: ', action1, action2)
+                #print('mutex_result: ', PgNode_a(action1).is_mutex(PgNode_a(action2)))
+                if PgNode_a(action1).is_mutex(PgNode_a(action2)):
+                    return True
+
         return False
 
     def h_levelsum(self) -> int:
