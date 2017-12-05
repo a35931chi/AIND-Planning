@@ -230,11 +230,13 @@ class AirCargoProblem(Problem):
 
         kb = PropKB()
         kb.tell(decode_state(node.state, self.state_map).pos_sentence())
+        nodes_needed = set()
+        print(node.state, node.parent, node.action, node.path_cost)
         for action in self.actions_list:
             for clause in action.effect_add:
                 if clause in kb.clauses:
-                    return 1
-        return 0
+                    nodes_needed.add(clause)
+        return len(nodes_needed)
 
 def air_cargo_p1() -> AirCargoProblem:
     cargos = ['C1', 'C2']
@@ -398,7 +400,7 @@ if __name__ == '__main__':
     # this is all the available actions for the problem, and we are also listing their preconditions as well as their effects
 
     # the problem is setup as the initial conditions/states. We will use the available actions to get us to the defined goal
-    if False:
+    if True:
         print('here are the available inputs:')
         print('cargo: ', p.cargos)
         print('airplanes: ', p.planes)

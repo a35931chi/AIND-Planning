@@ -274,24 +274,29 @@ class PlanningGraph():
         leveled = False
         level = 0
         self.s_levels.append(set())  # S0 set of s_nodes - empty to start
+        self.a_levels.append(set())
         # for each fluent in the initial state, add the correct literal PgNode_s
+        # in the first level = 0, we are adding PgNode_s, based on the positive and negative init fluents
         for literal in self.fs.pos:
             self.s_levels[level].add(PgNode_s(literal, True))
         for literal in self.fs.neg:
             self.s_levels[level].add(PgNode_s(literal, False))
+
         # no mutexes at the first level
 
         # continue to build the graph alternating A, S levels until last two S levels contain the same literals,
         # i.e. until it is "leveled"
         while not leveled:
-            self.add_action_level(level)
+            self.add_action_level(level) # since previous S0 or Si, we'll now add add actions
             self.update_a_mutex(self.a_levels[level])
 
             level += 1
-            self.add_literal_level(level)
+            self.s_levels.append(set())
+            self.a_levels.append(set())
+            self.add_literal_level(level) # since previous level is A0 or Ai, we'll now add the states
             self.update_s_mutex(self.s_levels[level])
 
-            if self.s_levels[level] == self.s_levels[level - 1]:
+            if self.s_levels[level] == self.s_levels[level - 1]: #we will only level, if this level is the same as the previous level, reaching a steady state
                 leveled = True
 
     def add_action_level(self, level):
@@ -310,6 +315,29 @@ class PlanningGraph():
         #   set iff all prerequisite literals for the action hold in S0.  This can be accomplished by testing
         #   to see if a proposed PgNode_a has prenodes that are a subset of the previous S level.  Once an
         #   action node is added, it MUST be connected to the S node instances in the appropriate s_level set.
+        #print('\n')
+        #print('All S-Nodes: ', [node.symbol for node in self.s_levels[level]])
+        for SNode in self.s_levels[level]:
+            #print('\n')
+            #print('this is an S-Node for level {}: '.format(level))
+            #print(SNode.symbol)
+            #print('\n')
+            for action in self.all_actions:
+                #print('this is a possible action for the S-Node: ', action)
+                #print('precond: ', [node.symbol for node in PgNode_a(action).prenodes])
+                #print('eff: ', [node.symbol for node in PgNode_a(action).effnodes])
+                ANode = PgNode_a(action)
+                if SNode in ANode.prenodes:
+                    #print('we have a match')
+                    self.a_levels[level].add(ANode)
+                    SNode.children.add(ANode)
+                    ANode.parents.add(SNode)
+                #else:
+                    #print('no match!')
+        #for SNode in self.s_levels[level]:
+            #print(SNode.symbol)
+            #SNode.show()
+            #print('All  A-Nodes: ', [(node.action.name, node.action.args) for node in self.a_levels[level]])
 
     def add_literal_level(self, level):
         """ add an S (literal) level to the Planning Graph
@@ -328,6 +356,23 @@ class PlanningGraph():
         #   may be "added" to the set without fear of duplication.  However, it is important to then correctly create and connect
         #   all of the new S nodes as children of all the A nodes that could produce them, and likewise add the A nodes to the
         #   parent sets of the S nodes
+        
+        print('level :', level)
+        print(len(self.a_levels[level - 1]))
+        print([(node.action.name, node.action.args) for node in self.a_levels[level - 1]])
+        
+        for ANode in self.a_levels[level - 1]:
+            print([type(node) for node in ANode.effnodes])
+            for SNode in ANode.effnodes:
+                print('about to add: ', SNode.symbol)
+                self.s_levels[level].add(SNode)
+                ANode.children.add(SNode)
+                SNode.parents.add(ANode)
+                print('completed')             
+                
+        
+        #for node in self.s_levels[level]:
+        #    node.show()
 
     def update_a_mutex(self, nodeset):
         """ Determine and update sibling mutual exclusion for A-level nodes
@@ -345,6 +390,9 @@ class PlanningGraph():
             mutex set in each PgNode_a in the set is appropriately updated
         """
         nodelist = list(nodeset)
+        #print('inside update_a_mutex')
+        #for node in nodelist:
+        #    print(node)
         for i, n1 in enumerate(nodelist[:-1]):
             for n2 in nodelist[i + 1:]:
                 if (self.serialize_actions(n1, n2) or
