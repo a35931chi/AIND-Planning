@@ -357,19 +357,18 @@ class PlanningGraph():
         #   all of the new S nodes as children of all the A nodes that could produce them, and likewise add the A nodes to the
         #   parent sets of the S nodes
         
-        print('level :', level)
-        print(len(self.a_levels[level - 1]))
-        print([(node.action.name, node.action.args) for node in self.a_levels[level - 1]])
+        #print('level :', level)
+        #print(len(self.a_levels[level - 1]))
+        #print([(node.action.name, node.action.args) for node in self.a_levels[level - 1]])
         
         for ANode in self.a_levels[level - 1]:
-            print([type(node) for node in ANode.effnodes])
+            #print([type(node) for node in ANode.effnodes])
             for SNode in ANode.effnodes:
-                print('about to add: ', SNode.symbol)
+                #print('about to add: ', SNode.symbol)
                 self.s_levels[level].add(SNode)
                 ANode.children.add(SNode)
                 SNode.parents.add(ANode)
-                print('completed')             
-                
+                #print('completed')             
         
         #for node in self.s_levels[level]:
         #    node.show()
@@ -395,9 +394,9 @@ class PlanningGraph():
         #    print(node)
         for i, n1 in enumerate(nodelist[:-1]):
             for n2 in nodelist[i + 1:]:
-                if (self.serialize_actions(n1, n2) or
-                        self.inconsistent_effects_mutex(n1, n2) or
-                        self.interference_mutex(n1, n2) or
+                if (self.serialize_actions(n1, n2) or #self.serial == True and either node is not persistent
+                        self.inconsistent_effects_mutex(n1, n2) or #
+                        self.interference_mutex(n1, n2) or #
                         self.competing_needs_mutex(n1, n2)):
                     mutexify(n1, n2)
 
@@ -434,6 +433,17 @@ class PlanningGraph():
         :return: bool
         """
         # TODO test for Inconsistent Effects between nodes
+        #print('node 1: ', node_a1.action, [(node.symbol, node.is_pos) for node in node_a1.effnodes])
+        #print('node 2: ', node_a2.action, [(node.symbol, node.is_pos) for node in node_a2.effnodes])
+        
+        for node1 in node_a1.effnodes:
+            for node2 in node_a2.effnodes:
+                #print(node1.symbol, node1.is_pos)
+                #print(node2.symbol, node2.is_pos)
+                if node1.symbol == node2.symbol and node1.is_pos != node2.is_pos:
+                    #print('inconsistent')
+                    return True
+        
         return False
 
     def interference_mutex(self, node_a1: PgNode_a, node_a2: PgNode_a) -> bool:
@@ -451,6 +461,27 @@ class PlanningGraph():
         :return: bool
         """
         # TODO test for Interference between nodes
+        #print('node 1: ', node_a1.action, [(node.symbol, node.is_pos) for node in node_a1.prenodes])
+        #print('node 1: ', node_a1.action, [(node.symbol, node.is_pos) for node in node_a1.effnodes])
+        #print('node 2: ', node_a2.action, [(node.symbol, node.is_pos) for node in node_a2.prenodes])
+        #print('node 2: ', node_a2.action, [(node.symbol, node.is_pos) for node in node_a2.effnodes])
+        
+        for node1 in node_a1.prenodes:
+            for node2 in node_a2.effnodes:
+                #print(node1.symbol, node1.is_pos)
+                #print(node2.symbol, node2.is_pos)
+                if node1.symbol == node2.symbol and node1.is_pos != node2.is_pos:
+                    #print('inconsistent')
+                    return True
+
+        for node1 in node_a1.effnodes:
+            for node2 in node_a2.prenodes:
+                #print(node1.symbol, node1.is_pos)
+                #print(node2.symbol, node2.is_pos)
+                if node1.symbol == node2.symbol and node1.is_pos != node2.is_pos:
+                    #print('inconsistent')
+                    return True
+        
         return False
 
     def competing_needs_mutex(self, node_a1: PgNode_a, node_a2: PgNode_a) -> bool:
