@@ -600,7 +600,7 @@ class PlanningGraph():
         level_sum = 0
         # TODO implement
         # for each goal in the problem, determine the level cost, then add them together
-        print(self.problem.goal)
+        #print(self.problem.goal)
         for level in range(len(self.s_levels)):
             temp1 = []
             temp2 = []

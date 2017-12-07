@@ -225,18 +225,26 @@ class AirCargoProblem(Problem):
         carried out from the current state in order to satisfy all of the goal
         conditions by ignoring the preconditions required for an action to be
         executed.
+
+        When evaluating the ignore preconditions heuristic, you are given a Node object that
+        describes the current state. You want to answer this question:
+        "What is the minimum number of actions you'll need to take to satisfy all your goals?"
+        In our code, we assume that the goals are satisfied by different actions, so if you have
+        3 goal states, it would require at least 3 actions to satisfy them.
+        So what you really want to do is figure out how many of the goal states are not yet
+        satisfied in the current state. Because the number of unsatisfied goals equals the
+        minimum number of actions you would need to take to satisfy them all.
+
         """
         # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
 
-        kb = PropKB()
-        kb.tell(decode_state(node.state, self.state_map).pos_sentence())
-        nodes_needed = set()
-        print(node.state, node.parent, node.action, node.path_cost)
+        poss_act_eff = None
         for action in self.actions_list:
-            for clause in action.effect_add:
-                if clause in kb.clauses:
-                    nodes_needed.add(clause)
-        return len(nodes_needed)
+            if node.action == action:
+                poss_act_eff = action.effect_add[0]
+        if poss_act_eff in self.goal:
+            return 0
+        return 1
 
 def air_cargo_p1() -> AirCargoProblem:
     cargos = ['C1', 'C2']
@@ -400,7 +408,7 @@ if __name__ == '__main__':
     # this is all the available actions for the problem, and we are also listing their preconditions as well as their effects
 
     # the problem is setup as the initial conditions/states. We will use the available actions to get us to the defined goal
-    if True:
+    if False:
         print('here are the available inputs:')
         print('cargo: ', p.cargos)
         print('airplanes: ', p.planes)
