@@ -571,34 +571,19 @@ class PlanningGraph():
         """
         # TODO test for Inconsistent Support between nodes
 
-        action_collect1 = set()
-        action_collect2 = set()
-        for action in self.all_actions:
-            #print('out of all actions: ', action)
-            for SNode in PgNode_a(action).effnodes:
-                #print('SNode: ', SNode.symbol, SNode.is_pos)
-                #print('node 1: ', node_s1.symbol, node_s1.is_pos)
-                #print('node 2: ', node_s2.symbol, node_s2.is_pos)
-                if SNode.symbol == node_s1.symbol and SNode.is_pos == node_s1.is_pos:
-                    #print('found one for node 1', action)
-                    action_collect1.add(action)
-                if SNode.symbol == node_s2.symbol and SNode.is_pos == node_s2.is_pos:
-                    #print('found one for node 2', action)
-                    action_collect2.add(action)
-                    
-        #print(action_collect1)
-        #print(action_collect2)
-        #print('\n')
-
-        for action1 in action_collect1:
-            for action2 in action_collect2:
-                #print('comparing: ', action1, action2)
-                #print('mutex_result: ', PgNode_a(action1).is_mutex(PgNode_a(action2)))
-                if PgNode_a(action1).is_mutex(PgNode_a(action2)):
-                    return True
+        
+        #print(node_s1, node_s2)
+        temp = []
+        for ANode1 in node_s1.parents:
+            #print(ANode1.action)
+            for ANode2 in node_s2.parents:
+                #print(ANode2.action)
+                temp.append(ANode1.is_mutex(ANode2))
+        if all(temp):
+            #print('inconsistent')
+            return True
 
         return False
-
 
     def h_levelsum(self) -> int:
         """The sum of the level costs of the individual goals (admissible if goals independent)
