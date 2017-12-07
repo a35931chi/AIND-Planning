@@ -506,7 +506,14 @@ class PlanningGraph():
                 if node1.symbol == node2.symbol and node1.is_pos != node2.is_pos:
                     #print('inconsistent')
                     return True
-        
+                
+        for SNode1 in node_a1.parents:
+            for SNode2 in node_a2.parents:
+                #print(SNode1.action, SNode2.action)
+                if SNode1.is_mutex(SNode2):
+                    #print('inconsistent')
+                    return True
+
         return False
 
     def update_s_mutex(self, nodeset: set):
@@ -591,6 +598,7 @@ class PlanningGraph():
                     return True
 
         return False
+
 
     def h_levelsum(self) -> int:
         """The sum of the level costs of the individual goals (admissible if goals independent)
