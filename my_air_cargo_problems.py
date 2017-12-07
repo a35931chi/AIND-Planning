@@ -238,13 +238,13 @@ class AirCargoProblem(Problem):
         """
         # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
 
-        poss_act_eff = None
+        poss_act_eff = []
         for action in self.actions_list:
             if node.action == action:
-                poss_act_eff = action.effect_add[0]
+                poss_act_eff.append(action.effect_add[0])
         if poss_act_eff in self.goal:
-            return 0
-        return 1
+            return 1
+        return 2
 
 def air_cargo_p1() -> AirCargoProblem:
     cargos = ['C1', 'C2']
