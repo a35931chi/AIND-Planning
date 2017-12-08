@@ -236,14 +236,21 @@ class AirCargoProblem(Problem):
 
         """
         # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
-
-        poss_act_eff = []
-        for action in self.actions_list:
-            if node.action == action:
-                poss_act_eff.append(action.effect_add[0])
-        if poss_act_eff in self.goal:
-            return 1
-        return 2
+        if True:
+            poss_act_eff = []
+            for action in self.actions_list:
+                if node.action == action:
+                    poss_act_eff.append(action.effect_add[0])
+            if poss_act_eff in self.goal:
+                return 1
+            return 2
+        else: #udacity suggestion, not working
+            count = 0
+            for i, fluent in enumerate(self.state_map):
+            #count number of fluents not correct
+                if fluent in self.goal:
+                    if node.state[i] == 'F':
+                        return count
 
 def air_cargo_p1() -> AirCargoProblem:
     cargos = ['C1', 'C2']
@@ -404,7 +411,7 @@ if __name__ == '__main__':
     # the action class is initialized with name(string), args(input tuples), preconditions(expressions), and effects(expressions)
     # this is all the available actions for the problem, and we are also listing their preconditions as well as their effects
     
-    p = air_cargo_p3()
+    p = air_cargo_p1()
 
     print("**** want to look at how the problem works ****")
     print("TESTING!!!!!!!!!!")
