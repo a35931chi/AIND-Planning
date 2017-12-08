@@ -204,7 +204,6 @@ class AirCargoProblem(Problem):
     def h_1(self, node: Node):
         # note that this is not a true heuristic
         h_const = 1
-        print('running h_1')
         return h_const
 
     @lru_cache(maxsize=8192)
@@ -393,9 +392,7 @@ if __name__ == '__main__':
         breadth_first_search, astar_search, depth_first_graph_search,
         uniform_cost_search, greedy_best_first_graph_search)
     import run_search
-    
-    p = air_cargo_p1()
-    
+
     # the problem is the air cargo problem
     # it takes in cargo (input options), planes (input options), airports (input options), initial fluent states(pos and neg), and goals
     # initial fluent states are a bunch of positive and negative expressions that limits the combinations of inputs at the initial stage
@@ -406,6 +403,41 @@ if __name__ == '__main__':
     # for this problem's actions_list, there's 3 types of actions: fly, load, unload. each action is a combination of the available inputs
     # the action class is initialized with name(string), args(input tuples), preconditions(expressions), and effects(expressions)
     # this is all the available actions for the problem, and we are also listing their preconditions as well as their effects
+    
+    p = air_cargo_p3()
+
+    print("**** want to look at how the problem works ****")
+    print("TESTING!!!!!!!!!!")
+    
+    if True: #the solution is correct
+        print("*** Breadth First Search")
+        run_search.run_search(p, breadth_first_search)
+        
+    if True: #the solution is correct, but terrible
+        print("*** Depth First Search")
+        run_search.run_search(p, depth_first_graph_search)
+        
+    if True: #the solution is correct, seems like it performs better than breath first
+        print("*** Uniform Cost Search")
+        run_search.run_search(p, uniform_cost_search)
+
+    if True: #the solution is correct, 
+        print("*** Greedy Best First Graph Search - null heuristic")
+        run_search.run_search(p, greedy_best_first_graph_search, parameter = p.h_1)
+
+    if True: #the solution is correct, 
+        print("*** A-star null heuristic")
+        run_search.run_search(p, astar_search, p.h_1)
+
+    if True:
+        print("A-star ignore preconditions heuristic")
+        run_search.run_search(p, astar_search, p.h_ignore_preconditions)
+    
+    if True:
+        print("A-star levelsum heuristic")
+        run_search.run_search(p, astar_search, p.h_pg_levelsum)
+
+    
 
     # the problem is setup as the initial conditions/states. We will use the available actions to get us to the defined goal
     if False:
@@ -429,56 +461,3 @@ if __name__ == '__main__':
         print(p.actions('FTTTFFFFFFFF'))
         pause = input('wait...')
         
-    print("**** want to look at how the problem works ****")
-    print("TESTING!!!!!!!!!!")
-    
-    if False: #the solution is correct
-        print("*** Breadth First Search")
-        ##Expansions   Goal Tests   New Nodes
-        ##    43          56         180
-        ##Plan length: 6  Time elapsed in seconds: 0.034479494898475814
-        run_search.run_search(p, breadth_first_search)
-        pause = input('wait...')
-        
-    if False: #the solution is correct, but terrible
-        print("*** Depth First Search")
-        ##Expansions   Goal Tests   New Nodes
-        ##    12          13          48    
-        ##Plan length: 12  Time elapsed in seconds: 0.008538446445639178
-        run_search.run_search(p, depth_first_graph_search)
-        pause = input('wait...')
-        
-    if False: #the solution is correct, seems like it performs better than breath first
-        print("*** Uniform Cost Search")
-        ##Expansions   Goal Tests   New Nodes
-        ##    55          57         224    
-        ##Plan length: 6  Time elapsed in seconds: 0.03182965293049566
-        run_search.run_search(p, uniform_cost_search)
-        pause = input('wait...')
-
-    if False: #the solution is correct, 
-        print("*** Greedy Best First Graph Search - null heuristic")
-        ##Expansions   Goal Tests   New Nodes
-        ##    7           9           28    
-        ##Plan length: 6  Time elapsed in seconds: 0.05840529331397908
-        run_search.run_search(p, greedy_best_first_graph_search, parameter = p.h_1)
-        what = input('wait...')
-
-    if False: #the solution is correct, 
-        print("*** A-star null heuristic")
-        ##Expansions   Goal Tests   New Nodes
-        ##    55          57         224    
-        ##Plan length: 6  Time elapsed in seconds: 0.30521858717361106
-        run_search.run_search(p, astar_search, p.h_1)
-        what = input('wait...')
-    
-    print("A-star ignore preconditions heuristic")
-    run_search.run_search(p, astar_search, p.h_ignore_preconditions)
-    what = input('wait...')
-    
-    #what = input('wait...')
-    # print("A-star ignore preconditions heuristic")
-    # rs(p, "astar_search - ignore preconditions heuristic", astar_search, p.h_ignore_preconditions)
-    # print("A-star levelsum heuristic")
-    # rs(p, "astar_search - levelsum heuristic", astar_search, p.h_pg_levelsum)
-
